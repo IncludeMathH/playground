@@ -10,7 +10,7 @@
 ## 安装
 
 ```shell
-conda create --n ocr-sam python=3.8 -y
+conda create -n ocr-sam python=3.8 -y
 conda activate ocr-sam
 pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113
 
