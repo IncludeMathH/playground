@@ -128,3 +128,4 @@ yolov5-6.1/
 # DIY
 mmocr_sam/checkpoints/
 mmocr_sam/data/
+mmocr_sam/work_dirs/

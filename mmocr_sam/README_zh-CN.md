@@ -15,18 +15,12 @@ conda activate ocr-sam
 pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113
 
 pip install -U openmim
-mim install mmengine
-mim install mmocr
-mim install 'mmcv==2.0.0rc4'
-mim install 'mmdet==3.0.0rc5'
-mim install 'mmcls==1.0.0rc5'
+mim install mmengine mmocr 'mmcv==2.0.0rc4' 'mmdet==3.0.0rc5' 'mmcls==1.0.0rc5'
 
 pip install git+https://github.com/facebookresearch/segment-anything.git
 pip install -r requirements.txt
 
-pip install gradio
-pip install diffusers
-pip install pytorch-lightning==2.0.1.post0
+pip install gradio diffusers pytorch-lightning==2.0.1.post0
 ```
 
 ## 下载权重
@@ -36,10 +30,7 @@ pip install pytorch-lightning==2.0.1.post0
 
 创建路径
 ```bash
-mkdir checkpoints
-mkdir checkpoints/mmocr
-mkdir checkpoints/sam
-mkdir checkpoints/ldm
+mkdir -p checkpoints/mmocr checkpoints/sam checkpoints/ldm
 mv db_swin_mix_pretrain.pth checkpoints/mmocr
 ```
 
