@@ -115,26 +115,32 @@ if __name__ == '__main__':
                                   device=sam_predictor.device)
         transformed_boxes = sam_predictor.transform.apply_boxes_torch(
             det_bboxes, img.shape[:2])
-        # SAM inference
-        sam_predictor.set_image(img, image_format='BGR')
-        masks, _, _ = sam_predictor.predict_torch(
-            point_coords=None,
-            point_labels=None,
-            boxes=transformed_boxes,
-            multimask_output=False,
-        )
+        
         # Show results
         plt.figure(figsize=(10, 10))
         # convert img to RGB
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         plt.imshow(img)
-        for mask, rec_text, polygon in zip(masks, rec_texts, det_polygons):
-            show_mask(mask.cpu(), plt.gca(), random_color=True)
-            polygon = np.array(polygon).reshape(-1, 2)
-            # convert polygon to closed polygon
-            polygon = np.concatenate([polygon, polygon[:1]], axis=0)
-            plt.plot(polygon[:, 0], polygon[:, 1], color='r', linewidth=2)
-            plt.text(polygon[0, 0], polygon[0, 1], rec_text, color='r')
+        if not transformed_boxes.numel():
+            pass
+        else:
+            # SAM inference
+            sam_predictor.set_image(img, image_format='BGR')
+            masks, _, _ = sam_predictor.predict_torch(
+                point_coords=None,
+                point_labels=None,
+                boxes=transformed_boxes,
+                multimask_output=False,
+            )
+
+            for mask, rec_text, polygon in zip(masks, rec_texts, det_polygons):
+                show_mask(mask.cpu(), plt.gca(), random_color=True)
+                polygon = np.array(polygon).reshape(-1, 2)
+                # convert polygon to closed polygon
+                polygon = np.concatenate([polygon, polygon[:1]], axis=0)
+                plt.plot(polygon[:, 0], polygon[:, 1], color='r', linewidth=2)
+                plt.text(polygon[0, 0], polygon[0, 1], rec_text, color='r')
         if args.show:
             plt.show()
-        plt.savefig(os.path.join(args.outdir, f'{i}.png'))
+        img_name = os.path.basename(ori_input).split('.')[0]
+        plt.savefig(os.path.join(args.outdir, f'{i}-' + img_name + '.png'))
